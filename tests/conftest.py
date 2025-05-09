@@ -12,7 +12,7 @@ load_dotenv()
 
 @pytest.fixture
 def app():
-    # create the app with a test configuration
+    
     test_config = {
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": os.environ.get('SQLALCHEMY_TEST_DATABASE_URI')
@@ -27,7 +27,7 @@ def app():
         db.create_all()
         yield app
 
-    # close and remove the temporary database
+  
     with app.app_context():
         db.drop_all()
 
@@ -36,10 +36,6 @@ def app():
 def client(app):
     return app.test_client()
 
-
-# This fixture gets called in every test that
-# references "one_task"
-# This fixture creates a task and saves it in the database
 @pytest.fixture
 def one_task(app):
     new_task = Task(title="Go on my daily walk 🏞", 
@@ -48,11 +44,6 @@ def one_task(app):
     db.session.add(new_task)
     db.session.commit()
 
-
-# This fixture gets called in every test that
-# references "three_tasks"
-# This fixture creates three tasks and saves
-# them in the database
 @pytest.fixture
 def three_tasks(app):
     db.session.add_all([
@@ -68,11 +59,6 @@ def three_tasks(app):
     ])
     db.session.commit()
 
-
-# This fixture gets called in every test that
-# references "completed_task"
-# This fixture creates a task with a
-# valid completed_at date
 @pytest.fixture
 def completed_task(app):
     new_task = Task(title="Go on my daily walk 🏞", 
@@ -82,21 +68,12 @@ def completed_task(app):
     db.session.commit()
 
 
-# This fixture gets called in every test that
-# references "one_goal"
-# This fixture creates a goal and saves it in the database
 @pytest.fixture
 def one_goal(app):
     new_goal = Goal(title="Build a habit of going outside daily")
     db.session.add(new_goal)
     db.session.commit()
 
-
-# This fixture gets called in every test that
-# references "one_task_belongs_to_one_goal"
-# This fixture creates a task and a goal
-# It associates the goal and task, so that the
-# goal has this task, and the task belongs to one goal
 @pytest.fixture
 def one_task_belongs_to_one_goal(app, one_goal, one_task):
     task_query = db.select(Task).where(Task.id == 1)
