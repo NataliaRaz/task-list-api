@@ -68,7 +68,7 @@ def mark_complete(id):
 
     task.completed_at = datetime.now(timezone.utc)
     db.session.commit()
-    token = os.environ.get('SLACK_BOT_TOKEN')
+    token = os.environ.get('SLACK_BOT_TOKEN', "")
 
     url = "https://slack.com/api/chat.postMessage"
     headers = {
